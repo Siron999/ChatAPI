@@ -29,7 +29,7 @@ def get_jwt_response(token: str) -> dict:
 def decode_access_token(token: str):
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        return payload if payload['expires'] >= time.time() else False
+        return payload if payload['expires'] >= time.time() else None
     except jwt.ExpiredSignatureError:
         logger.info(f'JWT Token expired')
         return None
