@@ -1,19 +1,8 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from app.controller.user_controller import user_route
+from app.filter.exception_filter import validation_exception_handler
 
 app = FastAPI()
 app.include_router(user_route)
 
-
-@app.exception_handler(Exception)
-async def validation_exception_handler(request: Request, exc: Exception):
-    return JSONResponse(
-        status_code=500,
-        content={
-            "detail": (
-                f"Failed method {request.method} at URL {request.url}."
-                f" Exception message is {exc!r}."
-            )
-        },
-    )
+app.add_exception_handler(Exception, validation_exception_handler)
